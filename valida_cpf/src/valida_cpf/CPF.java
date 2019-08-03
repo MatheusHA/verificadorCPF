@@ -43,6 +43,7 @@ public class CPF {
 		firstDigit = list.get(list.size()-2);
 		secondDigit = list.get(list.size()-1);
 		Collections.reverse(list);
+		System.out.println(checkSecondDigit(list, secondDigit));
 		return checkFirstDigit(list, firstDigit);
 	}
 	
@@ -51,6 +52,20 @@ public class CPF {
 		for(int i = 10; i > 1; i--) {
 			sum += list.get(i) * i;
 		}
+		int result = (sum * 10) % 11;
+		result = (result == 10)?0:result;
+		if (result == digit)
+			return true;
+		else
+			return false;
+	}
+	
+	private boolean checkSecondDigit(ArrayList<Integer> list, int digit) {
+		int sum = 0;
+		for(int i = 11; i > 1; i--) {
+			sum += list.get(i-1) * i;
+		}
+		System.out.println(sum);
 		int result = (sum * 10) % 11;
 		result = (result == 10)?0:result;
 		if (result == digit)
