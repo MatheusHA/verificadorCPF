@@ -6,11 +6,9 @@ import java.util.stream.Collectors;
 
 public class CPF {
 	private String cpf;
-	private ArrayList<Integer> cpfArray;
 	
 	public CPF(String cpf) {
 		this.cpf = cpf.replace(".", "").replace("-", "");
-		this.cpfArray = convertStringToArray(this.cpf);
 	}
 
 	private static ArrayList<Integer> convertStringToArray(String cpf) {
@@ -22,17 +20,21 @@ public class CPF {
 	}
 	
 	public boolean isValid() {
-		return testCPF(this.cpfArray);
+		return testCPF(this.cpf);
 	}
 	
-	private static boolean testCPF(ArrayList<Integer> cpf) {
-		int firstDigit, secondDigit;
-		if (cpf.size() != 11)
+	private static boolean testCPF(String cpf) {
+		if (cpf.matches("/[0-9]{11,11}")) 
 			return false;
-		firstDigit = cpf.get(cpf.size()-2);
-		secondDigit = cpf.get(cpf.size()-1);
-		Collections.reverse(cpf);
-		return checkFirstDigit(cpf, firstDigit) && checkSecondDigit(cpf, secondDigit);
+		ArrayList<Integer> cpfArray = convertStringToArray(cpf);
+		if (cpfArray.size() != 11)
+			return false;
+		
+		int firstDigit, secondDigit;
+		firstDigit = cpfArray.get(cpfArray.size()-2);
+		secondDigit = cpfArray.get(cpfArray.size()-1);
+		Collections.reverse(cpfArray);
+		return checkFirstDigit(cpfArray, firstDigit) && checkSecondDigit(cpfArray, secondDigit);
 	}
 	
 	private static boolean checkFirstDigit(ArrayList<Integer> list, int digit) {
@@ -63,7 +65,6 @@ public class CPF {
 	
 	public static boolean checkCPF(String cpf) {
 		cpf = cpf.replace(".", "").replace("-", "");
-		ArrayList<Integer> cpfArray = convertStringToArray(cpf);
-		return testCPF(cpfArray);
+		return testCPF(cpf);
 	}
 }
