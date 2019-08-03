@@ -15,19 +15,15 @@ public class CPF {
 	
 	public CPF(String cpf) {
 		this.cpf = cpf.replace(".", "").replace("-", "");
-		buildCpfArray(this.cpf);
+		this.cpfArray = convertStringToArray(this.cpf);
 	}
 	
 	public CPF(int cpf) {
 		this.cpf = String.valueOf(cpf);
-		buildCpfArray(this.cpf);
-	}
-	
-	private void buildCpfArray(String cpf) {
 		this.cpfArray = convertStringToArray(this.cpf);
 	}
 
-	private ArrayList<Integer> convertStringToArray(String cpf) {
+	private static ArrayList<Integer> convertStringToArray(String cpf) {
 		ArrayList<Integer> array = new ArrayList();
 		for (int i = 0; i < cpf.length(); i++) {
 			array.add(Character.getNumericValue(cpf.charAt(i)));
@@ -36,18 +32,20 @@ public class CPF {
 	}
 	
 	public boolean isValid() {
-		int firstDigit, secondDigit;
-		if (this.cpfArray.size() != 11)
-			return false;
-		ArrayList<Integer> list = this.cpfArray;
-		firstDigit = list.get(list.size()-2);
-		secondDigit = list.get(list.size()-1);
-		Collections.reverse(list);
-		System.out.println(checkSecondDigit(list, secondDigit));
-		return checkFirstDigit(list, firstDigit);
+		return testCPF(this.cpfArray);
 	}
 	
-	private boolean checkFirstDigit(ArrayList<Integer> list, int digit) {
+	private static boolean testCPF(ArrayList<Integer> cpf) {
+		int firstDigit, secondDigit;
+		if (cpf.size() != 11)
+			return false;
+		firstDigit = cpf.get(cpf.size()-2);
+		secondDigit = cpf.get(cpf.size()-1);
+		Collections.reverse(cpf);
+		return checkFirstDigit(cpf, firstDigit) && checkSecondDigit(cpf, secondDigit);
+	}
+	
+	private static boolean checkFirstDigit(ArrayList<Integer> list, int digit) {
 		int sum = 0;
 		for(int i = 10; i > 1; i--) {
 			sum += list.get(i) * i;
@@ -60,17 +58,22 @@ public class CPF {
 			return false;
 	}
 	
-	private boolean checkSecondDigit(ArrayList<Integer> list, int digit) {
+	private static boolean checkSecondDigit(ArrayList<Integer> list, int digit) {
 		int sum = 0;
 		for(int i = 11; i > 1; i--) {
 			sum += list.get(i-1) * i;
 		}
-		System.out.println(sum);
 		int result = (sum * 10) % 11;
 		result = (result == 10)?0:result;
 		if (result == digit)
 			return true;
 		else
 			return false;
+	}
+	
+	public static boolean checkCPF(String cpf) {
+		cpf = cpf.replace(".", "").replace("-", "");
+		ArrayList<Integer> cpfArray = convertStringToArray(cpf);
+		return testCPF(cpfArray);
 	}
 }
