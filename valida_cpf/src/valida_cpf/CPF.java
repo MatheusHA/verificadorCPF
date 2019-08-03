@@ -8,18 +8,8 @@ public class CPF {
 	private String cpf;
 	private ArrayList<Integer> cpfArray;
 	
-	public CPF() {
-		this.cpf = "";
-		this.cpfArray = new ArrayList();
-	}
-	
 	public CPF(String cpf) {
 		this.cpf = cpf.replace(".", "").replace("-", "");
-		this.cpfArray = convertStringToArray(this.cpf);
-	}
-	
-	public CPF(int cpf) {
-		this.cpf = String.valueOf(cpf);
 		this.cpfArray = convertStringToArray(this.cpf);
 	}
 
